@@ -51,6 +51,10 @@ st.markdown(
     h1, h2, h3, h4, h5, h6, p {
         text-align: center;
     }
+    .stButton>button {
+        display: block;
+        margin: auto;
+    }
     </style>
     """,
     unsafe_allow_html=True
@@ -98,20 +102,21 @@ input_data = [
     bmi
 ]
 
-# --- Run prediction automatically ---
-prediction, probability, times = predict(input_data)
-log_latency(times)
+# --- Prediction Button ---
+if st.button("🔍 Predict"):
+    prediction, probability, times = predict(input_data)
+    log_latency(times)
 
-# Show Prediction
-st.subheader("🔎 Prediction Result")
-if prediction == 1:
-    st.error("⚠️ RenalAI suggests you may have **Chronic Kidney Disease (CKD)**. Please consult a healthcare provider.")
-    st.write(f"Model Confidence: **{probability * 100:.2f}%** chance of CKD.")
-else:
-    st.success("✅ RenalAI suggests you are **not at risk of CKD** based on the current data.")
-    st.write(f"Model Confidence: **{(1 - probability) * 100:.2f}%** chance of being healthy.")
+    # Show Prediction
+    st.subheader("🔎 Prediction Result")
+    if prediction == 1:
+        st.error("⚠️ RenalAI suggests you may have **Chronic Kidney Disease (CKD)**. Please consult a healthcare provider.")
+        st.write(f"Model Confidence: **{probability * 100:.2f}%** chance of CKD.")
+    else:
+        st.success("✅ RenalAI suggests you are **not at risk of CKD** based on the current data.")
+        st.write(f"Model Confidence: **{(1 - probability) * 100:.2f}%** chance of being healthy.")
 
-# Probabilities
-st.subheader("📊 Prediction Probabilities")
-st.write(f"**Not CKD:** {(1 - probability) * 100:.2f}%")
-st.write(f"**CKD:** {probability * 100:.2f}%")
+    # Probabilities
+    st.subheader("📊 Prediction Probabilities")
+    st.write(f"**Not CKD:** {(1 - probability) * 100:.2f}%")
+    st.write(f"**CKD:** {probability * 100:.2f}%")
